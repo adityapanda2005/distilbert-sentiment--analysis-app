@@ -12,7 +12,7 @@ In stanadard cloud when data leaves it get exposed to the softwrae layer during 
 # Documents - what it includes:
 - First plan for demo POC
 - second HDL DESIGN DOC
-- third for IMPLEMENTATION DOC
+- third IMPLEMENTATION DOC
 
 # Status
 currently doing research for this and reviewing the plan for the app.
