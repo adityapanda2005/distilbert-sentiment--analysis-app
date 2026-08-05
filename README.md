@@ -10,9 +10,9 @@ In stanadard cloud when data leaves it get exposed to the softwrae layer during 
 - Also we can add a Azure ML Non-Confidential Baseline as it will be a simple ML (scikit-leran + Fast API ) it is lightweight app doing same work like what we  are building called sentiment app. so, the main purpose to use this to do comparision on the basis of latency and cost against the stack we are using and it will help to decide or it will give a good vision though because of building this app required cost and time and it should be worthy .(OPTIONAL)
 
 # Documents - what it includes:
-- one plan for demo POC
+- First plan for demo POC
 - second HDL DESIGN DOC
 - third for IMPLEMENTATION DOC
 
-# status
+# Status
 currently doing research for this and reviewing the plan for the app.
