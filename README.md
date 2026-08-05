@@ -1,5 +1,5 @@
 # confidential-computing-POC-DEMO-
-# **OBJECTIVE**-TO build a sentiment analysis app inside a confidential TEE setup
+# **OBJECTIVE**:TO build a sentiment analysis app inside a confidential TEE setup
 SO, the proof of concept of running this sentiment analysis app inside a confidential Trusted Execution enviorment which will decrypts your memory region inside a hardware sealed enclave so that it will never exposed to the software layer like hypervisor, OS and cloud operator.
 
 # **PROBLEM STATEMENT**
