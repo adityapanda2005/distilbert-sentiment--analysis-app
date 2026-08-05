@@ -2,7 +2,7 @@
 In standard cloud the data get exposed to software layers like OS , hypervisor and cloud operator and it happens because data used to be in encyption only two states
 - first in if the data is in rest
 - second the data is in transit
-  the main flaw comes when the data is in use(data is present in the form of plaintext readable format) generally when the computation happen it should be in decryption state so that computation can happen due to which it get exposed to outer operators.
+- the main flaw comes when the data is in use(data is present in the form of plaintext readable format) generally when the computation happen it should be in decryption state so that computation can happen due to which it get exposed to outer operators.
   To  close this gap we have idea to build confidential computing so that it will create a hardware based trusted execution enviorment(TEE) , A sealed encalve room but still in decryption state where we can still do computation but inside the enclave which is encrypts by a chip and walls off so no outside operators can access it . Also it provide a cryptographic proof (Attestation) it is done by service called microsoft azure attestaion(MAA)which checks the  code running inside the enclave it should be same  and then realease the token and a remote party can verify it against the proof before releasing any key or data inside into it.
   So, for this reason this app called sentiment analysis inside TEE container setp could be useful..
 
@@ -14,6 +14,42 @@ In standard cloud the data get exposed to software layers like OS , hypervisor a
   # VALUE FOR POC
 - Proves it actually works	Instead of assuming confidential computing protects our data, we see it working on a real app — with proof that the infrastructure genuinely can't read the data.
 - Gives us a template to reuse	Once we get this flow working once, we can copy the same setup for any future app that handles sensitive data. We solve it now, reuse it later.
-- Helps with compliance	For rules that require sensitive data to stay private (health, finance, etc.), we can point to a working system as real evidence — not just a promise on paper.
-- Teaches the team	The team learns how the pieces fit together (the secure enclave, the attestation check, the key release) on a low-risk demo, before using them on anything important.
+- this confidential computing is useful in many sectors like pharma where patients record are confidential , in financial services where , in defence & government where the document is confidential , ML models whose weights get exposed , and in Saas platforms
+
+  # STACK USED FOR THIS DEMO APP: **Azure Confidential Containers (CoCo) on AMD SEV-SNP**
+  **it includes two main parts**:
+  -  AMD SEV-SNP is the hardware layer. It is an AMD processor feature that encrypts an entire virtual machine's memory with a key held inside the chip, and blocks the host OS and hypervisor from reading or tampering with it. This is the hardware that makes the enclave possible.
+  -  Azure confidential container basically it is the platform layer,  It runs each container inside its own lightweight, hardware-protected VM on an AKS confidential node pool. In other words, it lets us take an ordinary container and run it inside a sealed, SEV-SNP-protected environment.
+Both leads to give a TEE setup(whole container): so that we can drop our app and its memory gets protected and without changing the app code
+
+**FEATURES**:
+- Fastest path of working demo we can containeraize whole python app and can run as it is and dont need to rewrite the whole app inside the enclave, and in the alternate process (SGX) requires splitting the app into trusted and untrusted parts, also required single doorway ECALL/OCALL with a custom boundary and C++ enclave code which will be more complex for intail part
+- The flow — attestation → key release → in-TEE decryption → inference — maps directly onto a clear, step-by-step demo that a reviewer can follow and verify.theflow workks end-t-end correctly
+- Easiest way of integration because it wrap the whole container  and it required minimal changes , fast way to adapt
+- It's  strong design  microsoft azure attestation(MAA) and key management  (vault key services) due to which key is released against the proof only and
+
+# SCOPE:
+**IN SCOPE**:
+- A working sentiment-analysis app running inside a confidential container.
+- The full trust chain: attestation → key release → in-TEE decryption → inference.
+- positive and neagative demonstartion: for positive works end to end: the enclave is genuine → attestation passes → the key is released → the data is decrypted inside the enclave → the model produces a correct sentiment result this proof only the it runs correctly while in neagative it tamper with the workload or run a modified/unexpected version. Now attestation fails → the key is not released → the data can never be decrypted → inference cannot run. Through this classification we can getv concrete idea of how it is protecting for complete proof
+  **out scope**:
+  - Non-confidential baseline, this is used for comparison against the stack we are using to do compare with cost and speed so that we have idea with proper number the app we are building with the  prefered stack is worthy of using
+  - this can be add later stage of production oce after we made the app for more adavanced .
+ 
+# SUCCESS CRITERIA
+-  Data stays sealed: encrypted input is decrypted and processed only inside the TEE; it is never readable by the host OS, hypervisor, or cloud operator.
+- Key is gated by proof: Azure Key Vault releases the decryption key only when attestation confirms a genuine, unmodified enclave.
+- Failure is provable: in the negative test, a tampered or unexpected workload fails attestation, no key is released, and inference cannot run. This is the key proof that the protection is real, not just an app on confidential hardware.
+- The app still works:  a valid end-to-end request returns a correct sentiment result.
+- 
+# OUTCOME AT THE END 
+- we can build our DEMO app
+- HLD design doc
+- implementation doc
+  
+
+
+  
+  
 
