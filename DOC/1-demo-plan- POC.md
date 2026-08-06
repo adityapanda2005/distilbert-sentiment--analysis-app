@@ -28,6 +28,26 @@ Both leads to give a TEE setup(whole container): so that we can drop our app and
 - Easiest way of integration because it wrap the whole container  and it required minimal changes , fast way to adapt
 - It's  strong design  microsoft azure attestation(MAA) and key management  (vault key services) due to which key is released against the proof only and
 
+# HIGH LEVEL ARCHITECTURE 
+the data is only ever readable inside the enclave, and the key that unlocks it is handed over only after the enclave proves it is genuine and it contains several components
+**COMPONENTS**:
+- **Client**:encrypts its input before sending, so the data is protected on the way in and can only be opened inside the enclave.
+- **confidential pod**: the sealed workload, running in its own hardware-protected VM (AMD SEV-SNP) so its memory is encrypted and unreadable from outside. It holds two parts: **Inference service** (this is your actual app: the DistilBERT model that reads the input and returns the sentiment result. Without it, there's nothing doing the work. Obviously required).SKR sidecar (a helper that proves the pod is genuine and fetches the key).
+- **MAA (Microsoft Azure Attestation)**: the independent verifier. It checks the enclave's hardware proof and, if valid, issues a signed token , which indicates it is genuine and protected enclave
+- **AKV (Azure Key Vault)**: the key holder. It releases the decryption key only when shown a valid attestation token. if it is not verified against proof then no key released
+**END-TO-END FLOW**:
+- **Client encrypts** the input and sends it in through the ingress.
+- **Pod attests** on startup, the SKR sidecar sends the enclave's hardware proof to MAA.
+- **MAA verifies** the proof and returns a signed token.
+- **AKV releases** the key only because that token is valid.
+- **Decrypt** inside the TEE — the input is decrypted (RSA-OAEP) inside the enclave, never outside it.
+- **Inference**  DistilBERT runs on the decrypted input.
+- **Result** returned to the client.
+# COMPLETE CHAIN STRUCTURE FOR THE FLOW
+The chain is what we demonstrate:
+- hardware seals the room → attestation proves the room is genuine → the key is released only against that proof → the data is processed safely inside. Break any link (e.g. tamper with the workload) and the chain stops before the data is ever exposed.
+- this flow of chain will be followed for the app by passing through the all the layers so that data will be not exposed to the outer operators.
+  
 # SCOPE:
 **IN SCOPE**:
 - A working sentiment-analysis app running inside a confidential container.
@@ -42,7 +62,7 @@ Both leads to give a TEE setup(whole container): so that we can drop our app and
 - Key is gated by proof: Azure Key Vault releases the decryption key only when attestation confirms a genuine, unmodified enclave.
 - Failure is provable: in the negative test, a tampered or unexpected workload fails attestation, no key is released, and inference cannot run. This is the key proof that the protection is real, not just an app on confidential hardware.
 - The app still works:  a valid end-to-end request returns a correct sentiment result.
-- 
+
 # OUTCOME AT THE END 
 - we can build our DEMO app
 - HLD design doc
