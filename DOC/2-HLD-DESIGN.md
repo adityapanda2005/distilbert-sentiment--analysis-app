@@ -52,34 +52,6 @@ flowchart TD
     AP["SKR sidecar — Inference Service<br/>gives decrypt key + DistilBERT inside TEE perform the the sentimet analysis it's the actual app"]
     HW --> CC --> AT --> SKR --> KR --> AP
 ```
-# DEPLOYMENT ARCHITECTURE
-Azure services (separate managed services, outside the pod)
-These sit alongside the cluster in the same subscription and are called over the network:
-
-- Microsoft Azure Attestation (MAA):verifies the enclave.
-- Azure Key Vault (with SKR):holds and releases the decryption key.
-- Azure Container Registry (ACR):  stores your container image (the pod pulls its image from here).
-```mermaid
-flowchart TD
-    CLIENT["Client (outside Azure)<br/>encrypts input"]
-
-    subgraph SUB["Azure Subscription / Resource Group"]
-      subgraph AKS["AKS Cluster"]
-        subgraph NP["Confidential Node Pool — AMD SEV-SNP"]
-          subgraph POD["Confidential Pod — utility VM, SEV-SNP sealed"]
-            INF["Inference Service<br/>decrypts + DistilBERT"]
-            SKR["SKR Sidecar<br/>attests + gets key"]
-          end
-        end
-      end
-      MAA["Microsoft Azure Attestation (MAA)<br/>proves enclave is genuine"]
-      AKV["Azure Key Vault (SKR)<br/>releases key on valid proof"]
-      ACR["Azure Container Registry<br/>stores container image"]
-    end
-
-    CLIENT -->|encrypted request| INF
-    INF -->|result| CLIENT
-    SKR -->|attest| MAA
-    SKR -->|get key| AKV
-    ACR -->|image pulled at deploy| POD
-```
+# DEPLOYMENT ARCHITECTURE 
+- set up an AKS cluster with a special confidential floor (SEV-SNP machines), deploy your app there as a sealed pod, and wire it to three Azure services — one to prove the pod is genuine, one to release the key, and one to store the app's image. Once deployed, the pod proves itself, gets the key, and safely processes encrypted requests from clients.
+- create the cluster → add the confidential floor → store the app image → deploy the pod there → connect it to attestation, key vault, and registry → and it's ready to processed the recieve encryption request by client 
