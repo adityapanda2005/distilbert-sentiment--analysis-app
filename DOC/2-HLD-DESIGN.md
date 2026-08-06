@@ -23,3 +23,21 @@ flowchart LR
     AKV -->|4. release key| SKR
     Inf -->|result| Client
 ```
+# LINK BETWEEN ATTESTATION AND KEY RELEASE
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant P as SKR Sidecar (in pod)
+    participant M as MAA
+    participant K as Key Vault (SKR)
+    participant I as Inference Service (in TEE)
+
+    C->>P: Encrypted input (RSA-OAEP)
+    P->>M: Send attestation evidence (SEV-SNP)
+    M-->>P: Signed attestation token
+    P->>K: Present token
+    K-->>P: Release decryption key
+    P->>I: Provide key
+    I->>I: Decrypt inside TEE + run inference
+    I-->>C: Sentiment result
+```
