@@ -13,5 +13,5 @@
 - Isolation check: confirm the data cannot be read from outside the enclave like oS , hypervisor and cloud operator 
 
 # CHECKING COST AND TIME 
-- we can add  **Azure ML Non-Confidential Baseline**
+- we can add  **Azure ML Non-Confidential Baseline** it is  a basic ML model that we can deploy using scikit-learn using FAST API serving endpoint to measure latency and cost against the stack we are using so that we can compare with the numeric numbers
 
