@@ -43,12 +43,12 @@ sequenceDiagram
 ```
 # LAYERS FLOWCHART END-TO-END
 ```mermaid
-flowchart BT
+flowchart TD
     HW["Hardware — AMD SEV-SNP<br/>encrypts VM memory"]
     CC["Platform — Azure CoCo + Kata<br/>pod in its own protected VM"]
     AT["Attestation — MAA<br/>proves enclave is genuine"]
     SKR["sidecar-AKV<br/>it gives token to AKV "]
     KR["Key Release(AKV) — Key Vault SKR<br/>key released only on valid proof"]
     AP["SKR sidecar — Inference Service<br/>gives decrypt key + DistilBERT inside TEE perform the the sentimet analysis it's the actual app"]
-    HW --> CC --> AT --> SKR -->  KR --> AP
+    HW --> CC --> AT --> SKR --> KR --> AP
 ```
