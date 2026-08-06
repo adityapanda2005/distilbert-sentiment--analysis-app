@@ -1,11 +1,11 @@
 # IMPLEMENTATION
-- Build the application — the DistilBERT sentiment inference service; confirm it runs inference correctly on sample text locally.
-- Provision confidential infrastructure — AKS cluster + confidential node pool (SEV-SNP) + CoCo/Kata → forms the hardware-sealed environment.
-- Containerize — build the image and store it in the registry.
-- Deploy the confidential pod — deploy the stored image onto the confidential node pool; it runs inside a sealed utility VM.
-- Add attestation + key release — the SKR sidecar attests to MAA, gets the signed token, and releases the decryption key from Key Vault.
-- TEE decryption + inference — inside the sealed pod, the input is decrypted using the released key, and the DistilBERT model runs inference to produce the sentiment result (positive/negative).
-- Wire the end-to-end client flow — client encrypts input → pod attests → key released → decrypt in TEE → inference → result returned.
+- Build the application: the DistilBERT sentiment inference service; confirm it runs inference correctly on sample text locally.
+- Provision confidential infrastructure: AKS cluster + confidential node pool (SEV-SNP) + CoCo/Kata → forms the hardware-sealed environment.
+- Containerize:  build the image and store it in the registry.
+- Deploy the confidential pod: deploy the stored image onto the confidential node pool; it runs inside a sealed utility VM.
+- Add attestation + key release : the SKR sidecar attests to MAA, gets the signed token, and releases the decryption key from Key Vault.
+- TEE decryption + inference : inside the sealed pod, the input is decrypted using the released key, and the DistilBERT model runs inference to produce the sentiment result (positive/negative).
+- Wire the end-to-end client flow : client encrypts input → pod attests → key released → decrypt in TEE → inference → result returned.
 
 # TESTING AND VALIDATION
 - Positive test: a valid workload attests successfully, the key is released, and inference returns a correct result.
