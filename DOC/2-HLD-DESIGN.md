@@ -53,5 +53,5 @@ flowchart TD
     HW --> CC --> AT --> SKR --> KR --> AP
 ```
 # DEPLOYMENT ARCHITECTURE 
-- set up an AKS cluster with a special confidential floor (SEV-SNP machines), deploy your app there as a sealed pod, and wire it to three Azure services — one to prove the pod is genuine, one to release the key, and one to store the app's image. Once deployed, the pod proves itself, gets the key, and safely processes encrypted requests from clients.
+- set up an AKS cluster with a special confidential floor (SEV-SNP machines), deploy your app there as a sealed pod, and wire it to three Azure services , one to prove the pod is genuine, one to release the key, and one to store the app's image. Once deployed, the pod proves itself, gets the key, and safely processes encrypted requests from clients.
 - create the cluster → add the confidential floor → store the app image → deploy the pod there → connect it to attestation, key vault, and registry → and it's ready to processed the recieve encryption request by client 
