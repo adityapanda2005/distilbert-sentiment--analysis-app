@@ -1,4 +1,5 @@
 # IMPLEMENTATION
+**PHASES OF IMPLEMENTATION**
 - Build the application: the DistilBERT sentiment inference service; confirm it runs inference correctly on sample text locally.
 - Provision confidential infrastructure: AKS cluster + confidential node pool (SEV-SNP) + CoCo/Kata → forms the hardware-sealed environment.
 - Containerize:  build the image and store it in the registry.
