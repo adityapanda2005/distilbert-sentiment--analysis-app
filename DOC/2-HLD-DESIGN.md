@@ -23,7 +23,7 @@ flowchart LR
     AKV -->|4. release key| SKR
     Inf -->|result| Client
 ```
-# LINK BETWEEN ATTESTATION AND KEY RELEASE
+# SECURITY HANDSHAKE BETWEEN MAA AND AKV
 ```mermaid
 sequenceDiagram
     participant C as Client
