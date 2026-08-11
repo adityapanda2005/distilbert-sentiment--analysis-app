@@ -22,7 +22,7 @@ And i built the certifier server as a simpleserver which  helps me to create the
 ## Full output
 See `demo-output.txt` for the complete terminal log. it shows how it is working
 
-## ## Note
+## Note
 The final app-to-app SSL secret exchange has a TLS handshake issue
 (newer OpenSSL). In the simulated model it have two apps both need to prove its genuineness and then only it got certfied(certifier service)
 instead like in my system diagram where only sealed enclave need to prove its genuiness and client only send the encrypted input. But the core trust chain flow worked basically the security part (core part) only the connection between two apps not bale to established.
