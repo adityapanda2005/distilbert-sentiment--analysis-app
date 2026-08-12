@@ -1,7 +1,7 @@
 ## BUILDING THE distilBERT model (ML model)
 - This **distilBERT model** does the sentiment analysis so it uses pytorch which is basically a python framework .
 - so it conatins the python code which can't be used in c++ enclave so we have to convert it into the onnx format 
-and whatever output is produced in pytorch it runs on onnx runtime.
+and whatever output is produced in pytorch it runs on onnx runtime.Because **.onnx** runtime is where c++ code can run it is acting as a bridge between the python code andc c++ enclave
 
 ## what it contains?
 - `convert_model.py` — exports HuggingFace model to `distilbert_sentiment.onnx` + `.onnx.data`
