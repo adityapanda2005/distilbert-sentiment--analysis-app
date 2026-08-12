@@ -1,0 +1,9 @@
+Input: This movie was absolutely wonderful!
+Result: POSITIVE (100.0%)
+
+Input: Terrible service, I want a refund.
+Result: NEGATIVE (99.8%)
+
+Input: The weather is okay today.
+Result: POSITIVE (100.0%)
+
